@@ -1,0 +1,9 @@
+python-dotenv
+aiohttp>=3.8.0
+supabase>=2.0.0
+pymupdf
+pillow
+pytesseract
+sentence-transformers
+numpy
+psycopg2-binary 

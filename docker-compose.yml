@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  ingest-worker:
+    build: .
+    environment:
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL}
+      - CHUNK_SIZE=${CHUNK_SIZE}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP}
+      - DOMAIN=${DOMAIN}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - STORAGE_BUCKET=${STORAGE_BUCKET}
+      - DATABASE_URL=${DATABASE_URL}
+    volumes:
+      - ./:/app 

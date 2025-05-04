@@ -6,4 +6,5 @@ pillow
 pytesseract
 sentence-transformers
 numpy
-psycopg2-binary 
+psycopg2-binary
+regex 

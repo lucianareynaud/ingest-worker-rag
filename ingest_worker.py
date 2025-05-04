@@ -9,6 +9,16 @@ import pytesseract
 from sentence_transformers import SentenceTransformer
 from supabase import create_client
 from dotenv import load_dotenv
+import re
+import unicodedata
+
+def sanitize_text(text: str) -> str:
+    text = unicodedata.normalize("NFKC", text)
+    text = text.lower()
+    text = re.sub(r"[\r\n\t]+", " ", text)
+    text = re.sub(r"[^0-9a-z \.,;:?!\\-]", "", text)
+    text = re.sub(r"\s{2,}", " ", text).strip()
+    return text
 
 # 1) Load config
 load_dotenv()
@@ -126,12 +136,13 @@ def process(path: str):
     
     # 3. embed & insert
     for idx, chunk in enumerate(all_chunks):
-        vec = embedder.encode(chunk).astype(np.float32).tolist()
+        sanitized_chunk = sanitize_text(chunk)
+        vec = embedder.encode(sanitized_chunk).astype(np.float32).tolist()
         supabase.table("document_chunks").insert({
             "domain": DOMAIN,
             "storage_path": path,
             "chunk_id": idx,
-            "content": chunk,
+            "content": sanitized_chunk,
             "embedding": vec
         }).execute()
     
